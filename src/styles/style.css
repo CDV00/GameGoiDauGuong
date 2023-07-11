@@ -1,0 +1,30 @@
+table, th, td {
+    border:1px solid black;
+}
+table{
+    width:210px; 
+    height: 210px;
+    margin: auto;
+}
+td{
+    width: 30%;
+    height: 30%;
+    font-size: 250%;
+    text-align: center;
+}
+td:hover{
+    background-color: #b9e6ff;
+}
+.sudoku-numpad{
+    width:188px; 
+    margin: auto;
+    margin-top: 50px;
+}
+.sudoku-numpad button{
+    width: 60px;
+    height: 60px;
+    font-size: 250%;
+}
+.sudoku-numpad button:hover{
+    background-color: bisque;
+}
