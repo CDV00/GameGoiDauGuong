@@ -13,6 +13,9 @@ const a31 = document.getElementById("31");
 const a32 = document.getElementById("32");
 const a33 = document.getElementById("33");
 
+
+let arrItems = document.querySelectorAll('.item');
+
 //button
 const button1 = document.getElementById("numpad-button1");
 const button2 = document.getElementById("numpad-button2");
@@ -33,29 +36,27 @@ let numpad_buttonForcus=0;
 
 
 
-const ChangeBackGroundElement = function(){
-
+const ChangeBackGroundElement = function(index){
+  
     if(numpad_buttonForcus > 0){
-        //this.value = numpad_buttonForcus;
-
-        this.innerHTML =numpad_buttonForcus;
-        if(numpad_buttonForcus != this.value)
-            this.style.color = "red";
+        arrItems[index].innerHTML =numpad_buttonForcus;
+        if(numpad_buttonForcus != arrItems[index].value)
+        arrItems[index].style.color = "red";
         else{
-            this.style.color = "blue";
+          arrItems[index].style.color = "blue";
         }
     }
 
     if(ElementForcusOld != ""){
-        if(ElementForcusOld == this.id)
+        if(ElementForcusOld == arrItems[index].id)
             return;
         document.getElementById(ElementForcusOld).style.backgroundColor = "";
-        ElementForcusOld = this.id;
-        this.style.backgroundColor = backgroundColorForcus;
+        ElementForcusOld = arrItems[index].id;
+        arrItems[index].style.backgroundColor = backgroundColorForcus;
     }
     else{
-        ElementForcusOld = this.id;
-        this.style.backgroundColor = backgroundColorForcus;
+        ElementForcusOld = arrItems[index].id;
+        arrItems[index].style.backgroundColor = backgroundColorForcus;
     }
         
   };
@@ -82,17 +83,24 @@ const ChangeBackGroundElement = function(){
   
 
   //td.style.backgroundColor = backgroundColorFocus;
-  a11.onclick = ChangeBackGroundElement;
-  a12.onclick = ChangeBackGroundElement;
-  a13.onclick = ChangeBackGroundElement;
+  // a11.onclick = ChangeBackGroundElement;
+  // a12.onclick = ChangeBackGroundElement;
+  // a13.onclick = ChangeBackGroundElement;
 
-  a21.onclick = ChangeBackGroundElement;
-  a22.onclick = ChangeBackGroundElement;
-  a23.onclick = ChangeBackGroundElement;
+  // a21.onclick = ChangeBackGroundElement;
+  // a22.onclick = ChangeBackGroundElement;
+  // a23.onclick = ChangeBackGroundElement;
 
-  a31.onclick = ChangeBackGroundElement;
-  a32.onclick = ChangeBackGroundElement;
-  a33.onclick = ChangeBackGroundElement;
+  // a31.onclick = ChangeBackGroundElement;
+  // a32.onclick = ChangeBackGroundElement;
+  // a33.onclick = ChangeBackGroundElement;
+
+
+  arrItems.forEach((ele,index) => {
+      ele.setAttribute("onclick", `ChangeBackGroundElement(${index})`);
+
+  });
+
 
   button1.onclick = ChangeBackGroundButton;
   button2.onclick = ChangeBackGroundButton;
@@ -145,6 +153,7 @@ const randomValueNotExistRow2 = function(index){
 
     console.log("index111: " + index);
 
+    let countErro = 0;
 
     let value = randomValue();
     // for (let i = 0; i < array2.length; i ++){
@@ -165,20 +174,27 @@ const randomValueNotExistRow2 = function(index){
         value = CheckValueColumn10(randomValue());
     }
     else{
-        while(i < array2.length){
+        while(i < array2.length+1){
         
             console.log("i: " + i);
             console.log("index: " + index);
             console.log("value: " + value);
     
-            if (index != 0 && array2[i] == value)  {
+            if (array2[i] == value)  {
                 value = randomValue();
                 i = -1;
             }
-            else if(i == index && array1[i] == value){
+            else if(i == index && array1[index] == value){
+                console.log("countErro: " + countErro);
+                if(countErro == 2){
+                    continue;
+                }
                 value = randomValue();
+                countErro = countErro+1;
                 i = -1;
             }
+            else
+                countErro =0;
             i++;
         }
     }
@@ -248,50 +264,211 @@ const randomValueArray3 = function(){
   const valueDefault = function(){
     a11.innerHTML = array1[0];
     a11.onclick = null;
-    a22.innerHTML = array2[1];
-    a22.onclick = null;
-    a33.innerHTML = array3[2];
-    a33.onclick = null;
+    //a22.innerHTML = array2[1];
+    //a22.onclick = null;
+    //a33.innerHTML = array3[2];
+    //a33.onclick = null;
     a13.innerHTML = array1[2];
     a13.onclick = null;
   }
+  const getValue = function(row, index, value){
+    //debugger;
+    let i = 0;
+    //let erroCount = 0;
+    //let erroValue = 0;
+    //let indexOld = 0;
+    //let valueErroOld = 0;
+    
+    if(row == 0){
+      while(i<index){
+        if(array[row][i] == value){
+          value = randomValue();
+          i = -1;
+        }
+        i++;
+      }
+    }
+    else if(row == 1){
+      let erroCount = 0;
+      let erroValue = 0;
+      let indexOld = 0;
+      let valueErroOld = 0;
 
+      while(i<index || (index == 0 && i == index)){
+        //debugger
+        if(array[row][i] == value){
+          value = randomValue();
+          i = -1;
+        }
+        else if(array[row-1][index] == value){
+          if(indexOld != i){
+            erroCount = 0;
+            erroValue = 0;
+          }else{
+            indexOld = i;
+          }
+          erroCount++;
+          valueErroOld = erroValue;
+          erroValue = value;
+  
+          value =randomValue();
+          if(erroCount >= 3 && erroValue == valueErroOld)
+            return 0;
+  
+          i = -1;
+        }
+        i++;
+      }
+    }else if(row == 2){
+      let erroCount = 0;
+      let erroValue = 0;
+      let indexOld = 0;
+      let valueErroOld = 0;
+
+      while(i<index || (index == 0 && i == index)){
+        //debugger
+        if(array[row][i] == value){
+          value = randomValue();
+          i = -1;
+        }
+        else if(array[row-1][index] == value || array[row-2][index] == value){
+          if(indexOld != i){
+            erroCount = 0;
+            erroValue = 0;
+          }else{
+            indexOld = i;
+          }
+          erroCount++;
+          valueErroOld = erroValue;
+          erroValue = value;
+  
+          value =randomValue();
+          if(erroCount >= 3 && erroValue == valueErroOld)
+            return 0;
+  
+          i = -1;
+        }
+        i++;
+      }
+    }
+
+
+
+    return value;
+  }
 
 var array = [[],[],[]];
 
-console.log(array.length)
+//console.log(array.length)
 
 const generateValue = function(){
+  //debugger
     for(let row = 0; row < array.length; row ++){
-        console.log(array.length)
+        //console.log(array.length)
         for(let column = 0; column < array.length; column ++){
             var value = randomValue();
-            if(!(row == 0 && column == 0)){
-                for(let i = 0; i <=  row; i++){
-                    if(!column == 0){
-                        for(let j = 0; j < column; j++){
-                            if(array[i][j] == value){
-
-                            }
-                        }
-                    }
-                }
+            
+            if(row == 0){
+              value= getValue(row, column, value);
+              let elm = (row+1)+""+(column+1);
+              //document.getElementById(elm).innerHTML = value;
+              document.getElementById(elm).value = value;
+              array[row][column]=value;
+              //index++;
             }
-            else
-                array[0][0]=value;
+            else if(row==1){
+              debugger
+              value= getValue(row, column, value);
+              if(value == 0){
+                array[1][0] = 0;
+                array[1][1] = 0;
+                array[1][2] = 0;
+                console.log("a");
+                value = randomValue();
+                column = -1;
+                continue;
+              }
+              let elm = (row+1)+""+(column+1);
+              //document.getElementById(elm).innerHTML = value;
+              document.getElementById(elm).value = value;
+              array[row][column]=value;
+            }else if(row==2){
+              debugger
+              value= getValue(row, column, value);
+              if(value == 0){
+                array[2][0] = 0;
+                array[2][1] = 0;
+                array[2][2] = 0;
+                console.log("a");
+                value = randomValue();
+                column = -1;
+                continue;
+              }
+              let elm = (row+1)+""+(column+1);
+              //document.getElementById(elm).innerHTML = value;
+              document.getElementById(elm).value = value;
+              array[row][column]=value;
+            }
+
+
+
+                
         }
     }
 };
 
-//generateValue();
 
 
 
 
-  randomValueArray1();
-  randomValueArray2();
-  randomValueArray3();
-  valueDefault();
+generateValue();
+
+
+const randomDefaultValue = function(){
+  return Math.floor(Math.random() * 8) + 0;
+};
+const DefaultValue = function(){
+  let value = randomDefaultValue;
+  
+}
+
+let arrayDf = ["11","12","13","21","22","23","31","32","33"];
+
+const generateDefautValue = function(numper){
+  let o1 = randomDefaultValue();
+  let o2 = randomDefaultValue();
+  while(o1 == o2)
+    o2 = randomDefaultValue();
+  let o3 = randomDefaultValue();
+  while(o3 == o2 || o3 == o1)
+    o3 = randomDefaultValue();
+
+  let o4 = randomDefaultValue();
+  while(o4 == o2 || o4 == o1 || o4 == o3)
+    o4 = randomDefaultValue();
+
+  //document.getElementById(o1).innerHTML = array[(parseInt(item.slice(0, 1)-1))][(item.slice(1, item.length)-1)];
+  document.getElementById(arrayDf[o1]).innerHTML = document.getElementById(arrayDf[o1]).value;
+  document.getElementById(arrayDf[o1]).onclick = null;
+  document.getElementById(arrayDf[o2]).innerHTML = document.getElementById(arrayDf[o2]).value;
+  document.getElementById(arrayDf[o2]).onclick = null;
+  document.getElementById(arrayDf[o3]).innerHTML = document.getElementById(arrayDf[o3]).value;
+  document.getElementById(arrayDf[o3]).onclick = null;
+  document.getElementById(arrayDf[o4]).innerHTML = document.getElementById(arrayDf[o4]).value;
+  document.getElementById(arrayDf[o4]).onclick = null;
+
+
+}
+
+generateDefautValue();
+
+
+
+
+  //randomValueArray1();
+  //randomValueArray2();
+  //randomValueArray3();
+  //valueDefault();
 
 
   

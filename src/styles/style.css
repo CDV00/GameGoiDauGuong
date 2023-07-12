@@ -24,6 +24,7 @@ td:hover{
     width: 60px;
     height: 60px;
     font-size: 250%;
+    border:1px solid black;
 }
 .sudoku-numpad button:hover{
     background-color: bisque;
