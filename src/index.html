@@ -34,9 +34,59 @@
             <button id="numpad-button3" value="3">3</button>
         </div>
     </div>
-    <!-- <script>
-        console.log("a");
-    </script> -->
+
+
+<input type="text" id="number">
+<button id="btnewGame">New Game</button>
+
+    <div id="aaaa">
+
+    </div>
+    <script>
+
+        function tableCreate(number) {
+            //body reference 
+            var body = document.getElementById("aaaa");
+
+            // create elements <table> and a <tbody>
+            var tbl = document.createElement("table");
+            var tblBody = document.createElement("tbody");
+
+            // cells creation
+            for (var j = 0; j < number; j++) {
+                // table row creation
+                var row = document.createElement("tr");
+
+                for (var i = 0; i < number; i++) {
+                    // create element <td> and text node 
+                    //Make text node the contents of <td> element
+                    // put <td> at end of the table row
+                    var cell = document.createElement("td");
+                    var cellText = document.createTextNode(i);
+
+                    cell.appendChild(cellText);
+                    row.appendChild(cell);
+                }
+
+                //row added to end of table body
+                tblBody.appendChild(row);
+            }
+
+            // append the <tbody> inside the <table>
+            tbl.appendChild(tblBody);
+            // put <table> in the <body>
+            body.appendChild(tbl);
+            // tbl border attribute to 
+            tbl.setAttribute("border", "2");
+        }
+
+document.getElementById("btnewGame").onclick = function(){
+    //alert(document.getElementById("number").value);
+    tableCreate(document.getElementById("number").value);
+};
+        
+
+    </script>
     <script src="./scripts/script.js"></script>
 </body>
 </html>
